@@ -26,11 +26,8 @@ public class PreAdverseActionNoticeEmail
     private String status;
     private LocalDate preNoticeDate;
     private LocalDate postNoticeDate;
-
-    @ManyToOne
-    @JoinColumn(name = "candidate_id")
-    @JsonBackReference
-    private Candidate candidate;
+    private Integer candidateId;
+    private String candidateName;
 
     @OneToMany(mappedBy = "preAdverseActionNoticeEmail", cascade = CascadeType.ALL)
     @JsonManagedReference

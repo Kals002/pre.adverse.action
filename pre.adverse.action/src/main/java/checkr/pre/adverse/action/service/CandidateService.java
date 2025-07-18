@@ -1,11 +1,10 @@
 package checkr.pre.adverse.action.service;
 
-import checkr.pre.adverse.action.dto.CandidateCourtSearchDTO;
-import checkr.pre.adverse.action.dto.CandidateDTO;
-import checkr.pre.adverse.action.dto.CandidateInformationDTO;
-import checkr.pre.adverse.action.dto.CandidateReportDTO;
+import checkr.pre.adverse.action.dto.*;
 import checkr.pre.adverse.action.entities.Candidate;
+import checkr.pre.adverse.action.entities.PreAdverseActionNoticeEmail;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface CandidateService
@@ -22,4 +21,9 @@ public interface CandidateService
 
     public String updateCandidateEngageStatus(Integer candidateId);
 
+    public List<CandidateAdverseActionsDTO> fetchAdverseActions(int offset, int limit);
+
+    public PreAdverseActionNoticeEmail savePreAdverseActionNoticeEmail(PreAdverseActionNoticeEmail preAdverseActionNoticeEmail);
+
+    public List<Candidate> exportCandidates(LocalDate fromDate, LocalDate toDate);
 }

@@ -1,11 +1,9 @@
 package checkr.pre.adverse.action.controller;
 
-import checkr.pre.adverse.action.dto.CandidateCourtSearchDTO;
-import checkr.pre.adverse.action.dto.CandidateDTO;
-import checkr.pre.adverse.action.dto.CandidateInformationDTO;
-import checkr.pre.adverse.action.dto.CandidateReportDTO;
+import checkr.pre.adverse.action.dto.*;
 import checkr.pre.adverse.action.entities.Candidate;
 import checkr.pre.adverse.action.entities.CandidateCourtSearch;
+import checkr.pre.adverse.action.entities.PreAdverseActionNoticeEmail;
 import checkr.pre.adverse.action.service.CandidateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import checkr.pre.adverse.action.repository.CandidateRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -67,6 +66,34 @@ public class CandidateController
     {
         String status = candidateService.updateCandidateEngageStatus(candidateId);
         return new ResponseEntity<>(status, HttpStatus.OK);
+    }
+
+    @GetMapping("/adverseActions/{offset}/{limit}")
+    public ResponseEntity<List<CandidateAdverseActionsDTO>> fetchAllAdverseActions
+                                                            (@PathVariable int offset, @PathVariable int limit)
+    {
+        List<CandidateAdverseActionsDTO> candidateAdverseActionsDTOS =
+                                                            candidateService.fetchAdverseActions(offset, limit);
+        return new ResponseEntity<>(candidateAdverseActionsDTOS, HttpStatus.OK);
+
+    }
+
+    @PostMapping("/adverseAction/save")
+    public ResponseEntity<PreAdverseActionNoticeEmail> savePreAdverseActionNoticeEmail(
+            @RequestBody PreAdverseActionNoticeEmail preAdverseActionNoticeEmail
+    )
+    {
+        PreAdverseActionNoticeEmail savedPreAdverseActionNoticeEmail = candidateService.
+                                                    savePreAdverseActionNoticeEmail(preAdverseActionNoticeEmail);
+        return new ResponseEntity<>(savedPreAdverseActionNoticeEmail, HttpStatus.OK);
+    }
+
+    @GetMapping("/export/report")
+    public ResponseEntity<List<Candidate>> exportReport(@RequestParam LocalDate fromDate,
+                                                        @RequestParam LocalDate toDate)
+    {
+            List<Candidate> candidates = candidateService.exportCandidates(fromDate, toDate);
+            return new ResponseEntity<>(candidates, HttpStatus.OK);
     }
 
 }

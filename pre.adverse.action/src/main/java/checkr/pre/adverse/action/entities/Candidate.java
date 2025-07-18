@@ -40,9 +40,6 @@ public class Candidate
     @JsonManagedReference
     private List<CandidateCourtSearch> candidateCourtSearch;
 
-    @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<PreAdverseActionNoticeEmail> preAdverseActionNoticeEmail;
 
 
 
