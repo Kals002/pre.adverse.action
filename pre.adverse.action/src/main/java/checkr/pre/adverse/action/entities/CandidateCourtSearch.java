@@ -16,13 +16,9 @@ public class CandidateCourtSearch
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private String ssnVerification;
-    private String sexOffender;
-    private String globalWatchList;
-    private String federalCharges;
-    private String countryCriminal;
+    private String offenseName;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "candidate_id")
     @JsonBackReference
     private Candidate candidate;

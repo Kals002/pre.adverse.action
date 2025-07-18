@@ -36,9 +36,9 @@ public class Candidate
     @JsonManagedReference
     private CandidateReport candidateReport;
 
-    @OneToOne(mappedBy = "candidate", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private CandidateCourtSearch candidateCourtSearch;
+    private List<CandidateCourtSearch> candidateCourtSearch;
 
     @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
     @JsonManagedReference
