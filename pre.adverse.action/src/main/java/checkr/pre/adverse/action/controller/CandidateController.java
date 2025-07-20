@@ -6,6 +6,8 @@ import checkr.pre.adverse.action.service.CandidateService;
 import checkr.pre.adverse.action.service.JwtService;
 import checkr.pre.adverse.action.service.RefreshTokenService;
 import checkr.pre.adverse.action.service.UserInfoService;
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import checkr.pre.adverse.action.repository.CandidateRepository;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -105,22 +108,22 @@ public class CandidateController
 
     @PostMapping("/adverseAction/save")
     @PreAuthorize("hasAuthority('ROLES_ADMIN')")
-    public ResponseEntity<PreAdverseActionNoticeEmail> savePreAdverseActionNoticeEmail(
+    public ResponseEntity<String> savePreAdverseActionNoticeEmail(
             @RequestBody PreAdverseActionNoticeEmail preAdverseActionNoticeEmail
-    )
+    ) throws MessagingException
     {
-        PreAdverseActionNoticeEmail savedPreAdverseActionNoticeEmail = candidateService.
+        String emailSentNotification = candidateService.
                                                     savePreAdverseActionNoticeEmail(preAdverseActionNoticeEmail);
-        return new ResponseEntity<>(savedPreAdverseActionNoticeEmail, HttpStatus.OK);
+        return new ResponseEntity<>(emailSentNotification, HttpStatus.OK);
     }
 
     @GetMapping("/export/report")
     @PreAuthorize("hasAuthority('ROLES_ADMIN')")
-    public ResponseEntity<List<Candidate>> exportReport(@RequestParam LocalDate fromDate,
-                                                        @RequestParam LocalDate toDate)
-    {
-            List<Candidate> candidates = candidateService.exportCandidates(fromDate, toDate);
-            return new ResponseEntity<>(candidates, HttpStatus.OK);
+    public ResponseEntity<Void> exportReport(@RequestParam LocalDate fromDate,
+                                                        @RequestParam LocalDate toDate,
+                                                     HttpServletResponse response) throws IOException {
+           candidateService.exportCandidates(fromDate, toDate, response);
+            return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // JWT
